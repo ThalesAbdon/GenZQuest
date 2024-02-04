@@ -1,59 +1,54 @@
 "use client";
 import { FaMedal } from "react-icons/fa6";
-import { AiOutlinePlus} from "react-icons/ai"
+import BadgesItem from "./BadgesItem";
+import { useEffect, useState } from "react";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 
 const Badges = () => {
-    const onClick = () => {
+  const { supabaseClient } = useSessionContext();
+  const [shouldRender, setShouldRender] = useState(false);
 
-    }
-    return ( 
-        <div className="flex flex-col">
-            <div className="
-                flex
-                items-center
-                justify-between
-                px-5
-                pt-4
-            ">
-            <div className="
-                inline-flex
-                items-center
-                gap-x-2
-            "
-            >
-                <FaMedal className="text-neutral-400" size={26}/>
-                <p
-                    className="
-                        text-neutral-400
-                        font-medium
-                        text-md
-                    "
-                >
-                    Suas Conquistas!
-                </p>
-            </div>    
-            <AiOutlinePlus
-                onClick = {onClick}
-                size={20}
-                className="
-                    text-neutral-400
-                    cursor-pointer
-                    hover:text-white
-                    transition
-                "
-            />
-            </div>
-            <div className="
-                flex
-                flex-col
-                gap-y-2
-                mt-4
-                px-3
-            ">
-                
-            </div>
+  useEffect(() => {
+    const checkBadges = async () => {
+      const { data } = await supabaseClient
+        .from('users')
+        .select('*')
+        .eq('id', (await supabaseClient.auth.getSession()).data.session?.user.id)
+        .single();
+
+        if(!data){
+          return 
+        }
+        if((data.quiz1 || data.quiz2) || data.score >= 500){
+          setShouldRender(true);
+        }
+    };
+
+    checkBadges();
+
+    // Adiciona um ouvinte para alterações no estado de autenticação
+    const authListener = supabaseClient.auth.onAuthStateChange(() => {
+      checkBadges();
+    });
+
+    // Limpa o ouvinte quando o componente é desmontado
+    return () => {
+      authListener.data.subscription.unsubscribe();
+    };
+  }, [supabaseClient]);
+
+  return (
+    <div className="flex flex-col">
+      <div className="flex items-center justify-between px-5 pt-4">
+        <div className="inline-flex items-center gap-x-2">
+          <FaMedal className="text-neutral-400" size={26} />
+          <p className="text-neutral-400 font-medium text-md">Suas Conquistas!</p>
         </div>
-    );
-}
- 
+      </div>
+      <div className="flex flex-col gap-y-2 mt-4 px-3"></div>
+      <div>{shouldRender && <BadgesItem />}</div>
+    </div>
+  );
+};
+
 export default Badges;
