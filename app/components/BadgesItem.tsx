@@ -11,19 +11,19 @@ const BadgesItem = () => {
   const [shouldRenderToTheTop, setShouldRenderToTheTop] = useState(false);
   useEffect(() => {
     async function checkBadges(){
-      // const { data } : any = await supabaseClient 
-      // .from('users')
-      // .select('*')
-      // .eq('id', (await supabaseClient.auth.getSession()).data.session?.user.id)
-      // .single()
+      const { data } : any = await supabaseClient 
+      .from('users')
+      .select('*')
+      .eq('id', (await supabaseClient.auth.getSession()).data.session?.user.id)
+      .single()
 
-      // if (data.quiz1 || data.quiz2) {
-      //   setShouldRenderFirstQuiz(true);
-      // }
+      if (data.quiz1 || data.quiz2) {
+        setShouldRenderFirstQuiz(true);
+      }
 
-      // if(data.score >= 500){
-      //   setShouldRenderToTheTop(true)
-      // }
+      if(data.score >= 500){
+        setShouldRenderToTheTop(true)
+      }
 
     } 
     checkBadges()

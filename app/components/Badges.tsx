@@ -10,31 +10,28 @@ const Badges = () => {
 
   useEffect(() => {
     const checkBadges = async () => {
-      // const { data, error } = await supabaseClient
-      //   .from('users')
-      //   .select('*')
-      //   .eq('id', (await supabaseClient.auth.getSession()).data.session?.user.id)
-      //   .single();
+      const { data, error } = await supabaseClient
+        .from('users')
+        .select('*')
+        .eq('id', (await supabaseClient.auth.getSession()).data.session?.user.id)
+        .single();
         
-      //   if (error) {
-      //     console.warn('Usuário não está logado. Não é possível buscar dados.');
-      //     setShouldRender(false); 
-      //     return;
-      //   }
+        if (error) {
+          console.warn('Usuário não está logado. Não é possível buscar dados.');
+          setShouldRender(false); 
+          return;
+        }
 
-      //   if((data.quiz1 || data.quiz2) || data.score >= 500){
-      //     setShouldRender(true);
-      //   }
+        if((data.quiz1 || data.quiz2) || data.score >= 500){
+          setShouldRender(true);
+        }
     };
 
-    checkBadges();
-
-    // Adiciona um ouvinte para alterações no estado de autenticação
+  
     const authListener = supabaseClient.auth.onAuthStateChange(() => {
       checkBadges();
     });
 
-    // Limpa o ouvinte quando o componente é desmontado
     return () => {
       authListener.data.subscription.unsubscribe();
     };
