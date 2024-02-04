@@ -97,16 +97,24 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose }) => {
     
       const getSession = JSON.parse(localStorage.getItem("session") as string)
       
-      const { data, error } : any = await supabaseClient 
-      .from('users')
-      .select('score')
-      .eq('id', getSession.user.id)
-      .single()
-      
       let totalScore = ((score * 100) - timer)
       if(totalScore <= 0){
         totalScore = 0
+      } 
+
+      
+      const { data, error } : any = await supabaseClient 
+      .from('users')
+      .select('score,email')
+      .eq('id', getSession.user.id)
+      .single()
+      
+      const setEmail = (await supabaseClient.auth.getSession()).data.session?.user.email
+      if(data.email == null){
+        console.log(setEmail)
+        await supabaseClient.from('users').update({email: setEmail}).eq('id', getSession.user.id)
       }
+
       
       await supabaseClient 
         .from('users')

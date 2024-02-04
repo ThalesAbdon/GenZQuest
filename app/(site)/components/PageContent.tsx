@@ -10,15 +10,24 @@ const PageContent = () => {
   const [quizData, setQuizData] = useState(false);
   const [quizData2, setQuizData2] = useState(false);
   const [shouldRender, setShouldRender] = useState(true);
-  const router = useRouter()
   useEffect(() => {  
     async function fetchData() {
+      const session = await supabaseClient.auth.getSession();
+      const userId = session.data.session?.user.id;
+      console.log(userId)
+      if (!userId) {
+        console.warn('Usuário não está logado. Não é possível buscar dados.');
+        setShouldRender(true); 
+        return;
+      }
       const { data, error } = await supabaseClient 
         .from('users')
         .select('quiz1,quiz2')
-        .eq('id', (await supabaseClient.auth.getSession()).data.session?.user.id);
+        .eq('id', userId);
+      
+       
       if (error) {
-        console.error('Error fetching data:', error.message);
+        console.error('Error fetching data:', 'você precisa logar!');
       } else {
         setQuizData(data.length > 0 ? data[0].quiz1 : false);
         setQuizData2(data.length > 0 ? data[0].quiz2 : false);
