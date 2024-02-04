@@ -10,18 +10,21 @@ const Badges = () => {
 
   useEffect(() => {
     const checkBadges = async () => {
-      const { data } = await supabaseClient
-        .from('users')
-        .select('*')
-        .eq('id', (await supabaseClient.auth.getSession()).data.session?.user.id)
-        .single();
+      // const { data, error } = await supabaseClient
+      //   .from('users')
+      //   .select('*')
+      //   .eq('id', (await supabaseClient.auth.getSession()).data.session?.user.id)
+      //   .single();
+        
+      //   if (error) {
+      //     console.warn('Usuário não está logado. Não é possível buscar dados.');
+      //     setShouldRender(false); 
+      //     return;
+      //   }
 
-        if(!data){
-          return 
-        }
-        if((data.quiz1 || data.quiz2) || data.score >= 500){
-          setShouldRender(true);
-        }
+      //   if((data.quiz1 || data.quiz2) || data.score >= 500){
+      //     setShouldRender(true);
+      //   }
     };
 
     checkBadges();

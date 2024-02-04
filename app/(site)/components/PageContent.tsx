@@ -2,7 +2,6 @@
 import QuizItem from '@/app/components/QuizItem';
 import QuizItem2 from '@/app/components/QuizItem2';
 import { useSessionContext } from '@supabase/auth-helpers-react';
-import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 const PageContent = () => {
