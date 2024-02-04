@@ -14,7 +14,6 @@ const PageContent = () => {
     async function fetchData() {
       const session = await supabaseClient.auth.getSession();
       const userId = session.data.session?.user.id;
-      console.log(userId)
       if (!userId) {
         console.warn('Usuário não está logado. Não é possível buscar dados.');
         setShouldRender(true); 

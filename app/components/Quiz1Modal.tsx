@@ -111,7 +111,6 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose }) => {
       
       const setEmail = (await supabaseClient.auth.getSession()).data.session?.user.email
       if(data.email == null){
-        console.log(setEmail)
         await supabaseClient.from('users').update({email: setEmail}).eq('id', getSession.user.id)
       }
 
