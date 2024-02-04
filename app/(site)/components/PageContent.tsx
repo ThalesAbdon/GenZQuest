@@ -18,19 +18,17 @@ const PageContent = () => {
         setShouldRender(true); 
         return;
       }
-      const { data, error } = await supabaseClient 
+      const { data, error }: any = await supabaseClient 
         .from('users')
         .select('quiz1,quiz2')
         .eq('id', userId);
       
        
-      if (error) {
-        console.error('Error fetching data:', 'você precisa logar!');
-      } else {
+    
         setQuizData(data.length > 0 ? data[0].quiz1 : false);
         setQuizData2(data.length > 0 ? data[0].quiz2 : false);
         setShouldRender(true);
-      }
+      
     }
 
     fetchData();
