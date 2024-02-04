@@ -11,14 +11,14 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchData() {
-      let { data, error } : any = await supabaseClient 
-      .from('users')
-      .select('*')
-      .gt('score', 1)
-      .order('score', { ascending: false }).limit(5)
-      if (data && data.length > 0) {
-        setUserList(data);
-    }
+    //   let { data, error } : any = await supabaseClient 
+    //   .from('users')
+    //   .select('*')
+    //   .gt('score', 1)
+    //   .order('score', { ascending: false }).limit(5)
+    //   if (data && data.length > 0) {
+    //     setUserList(data);
+    // }
       
     }
     fetchData();
