@@ -105,16 +105,22 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose }) => {
       
       const { data, error } : any = await supabaseClient 
       .from('users')
-      .select('score,email')
+      .select('score,email,badge2')
       .eq('id', getSession.user.id)
       .single()
       
+      if(data.badge2 == true){
+        totalScore = 0;
+        setModalVisible(false);
+        onClose();      
+      }
+
       const setEmail = (await supabaseClient.auth.getSession()).data.session?.user.email
       if(data.email == null){
         await supabaseClient.from('users').update({email: setEmail}).eq('id', getSession.user.id)
       }
 
-      
+
       await supabaseClient 
         .from('users')
         .update({ score: data.score + (totalScore), quiz2: quiz2, badge2: badge2})

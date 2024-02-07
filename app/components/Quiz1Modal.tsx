@@ -105,9 +105,15 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose }) => {
       
       const { data, error } : any = await supabaseClient 
       .from('users')
-      .select('score,email')
+      .select('score,email,badge1')
       .eq('id', getSession.user.id)
       .single()
+
+      if(data.badge1 == true){
+        totalScore = 0;
+        setModalVisible(false);
+        onClose();      
+      }
       
       const setEmail = (await supabaseClient.auth.getSession()).data.session?.user.email
       if(data.email == null){
